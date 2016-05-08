@@ -9,10 +9,11 @@ Requirement :
 - User Story: As an unauthenticated user, when I login I should not have to search again.
 
 Technology stack : 
-- React Flux
-- Karma
-- NodeJS
+- React + Redux
+- Mocha + Chai
+- NodeJS + Express
+- MongoDB
 - Webpack
-- Pug & SASS
+- SASS
 
 Live demo : http://nightlife.muhammad-irfan.me

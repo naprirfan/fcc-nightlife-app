@@ -1,6 +1,7 @@
 import React from 'react'
 import { render } from 'react-dom'
-import App from '../components/App'
+import Body from './Body'
+import Header from './Header'
 import configureStore from '../redux/store'
 import { Provider } from 'react-redux'
 
@@ -13,6 +14,9 @@ let initialState = {
   user : {
   	username: "naprirfan",
   	id : 25
+  },
+  search : {
+    showLoading : false
   }
 }
 
@@ -20,7 +24,10 @@ let store = configureStore(initialState)
 
 render(
   <Provider store={store}>
-    <App />
+    <div>
+      <Header />
+      <Body />
+    </div>
   </Provider>,
   document.getElementById('app')
 )
