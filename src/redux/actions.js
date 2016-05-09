@@ -1,4 +1,11 @@
+import fetch from 'isomorphic-fetch'
+
 let actions = {
+  /*
+    --------------
+    SEARCH RELATED
+    --------------
+  */
   showSearchLoading : function() {
     return {
       type : "SHOW_SEARCH_LOADING"
@@ -11,17 +18,31 @@ let actions = {
     }
   },
 
-  doSearch : function(query) {
+  doSearch : function(query, page) {
     return (dispatch) => {
       dispatch(actions.showSearchLoading())
-      setTimeout(
-        () => {
-          console.log(query)
-          dispatch(actions.hideSearchLoading())
-        }
-      , 2500)
+      page = page || 1
+
+      return fetch('/search/' + query + '/' + page)
+        .then(response => response.json())
+        .then(json => dispatch(actions.onReceiveItems(json)))
     }
   },
+
+  onReceiveItems : function(json) {
+    return {
+      type : "POPULATE_ITEMS",
+      data : json
+    }
+  },
+
+  /*
+    --------------
+    USER RELATED
+    --------------
+  */
+
+
 
 }
 

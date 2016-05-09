@@ -39,7 +39,7 @@ class SearchForm extends Component {
             			onChange={this._handleChange.bind(this)}
 		            />
 		            <span className="input-group-btn">
-		              <button className="btn btn-brown" type="button">Go!</button>
+		              <button className="btn btn-brown" type="submit">Go!</button>
 		            </span>
 		          </div>
 		        </form>

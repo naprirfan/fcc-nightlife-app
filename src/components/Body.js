@@ -11,7 +11,7 @@ class Body extends Component {
     return (
 		  <div>
       		<SearchForm search={this.props.search} actions={this.props.actions} />
-      		<SearchResultList search={this.props.search} />
+      		<SearchResultList search={this.props.search} actions={this.props.actions} />
   		</div>
     )
   }

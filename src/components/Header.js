@@ -16,7 +16,7 @@ class Header extends Component {
 			    </div>
 			    <div className="collapse navbar-collapse" id="main-navbar">
 			      <ul className="nav navbar-nav navbar-right">
-			        <li><a href="#" className="navButton" data-section="contact"><i className="fa fa-github"></i> Sign in with Github</a></li>
+			        <li><a href="#" className="navButton" data-section="contact">Places I'm Going</a></li>
 			      </ul>
 			    </div>
 			  </div>

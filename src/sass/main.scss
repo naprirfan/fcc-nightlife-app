@@ -15,16 +15,16 @@ h1 {
 
 .navbar-default {
 	font-family: 'Cardo', serif;
-	background-color: #1E3888;
+	background-color: rgba(30, 56, 136, 0.8);
 	padding: 1em;
 }
 .navbar-brand {
-	font-size: 30px;
-	color: #F9BF3B !important;
+	font-size: 2.3em;
+	color: #E0E2DB !important;
 }
 ul.navbar-right > li > a {
 	font-size: 20px;
-	color: #F9BF3B !important;
+	color: #E0E2DB !important;
 }
 
 .jumbotron {
@@ -34,4 +34,24 @@ ul.navbar-right > li > a {
 		background-color: #111;
 		color: white;
 	}
+}
+
+.no-result {
+	margin: 2em;
+}
+
+.panel {
+	margin: 2em;
+	.panel-heading {
+		font-family: 'Cardo', serif;
+		font-size: 2em;
+		font-weight: bold;
+	}
+	.panel-body {
+		color: #111;
+	}
+}
+
+.clickable {
+	cursor: pointer;
 }

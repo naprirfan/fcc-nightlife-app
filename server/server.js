@@ -7,6 +7,9 @@ var config = require('../webpack.config.js');
 var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
+var mongodb = require("mongodb");
+var mongodbclient = mongodb.MongoClient;
+var db_url = "mongodb://"+ process.env.MONGODB_USER +":"+ process.env.MONGODB_PASSWORD +"@ds013951.mlab.com:13951/fcc-challenge";
 
 var app = express();
 var compiler = webpack(config);
@@ -30,6 +33,7 @@ app.get('/search/:place/:page?', function(req,res){
 	url += '&pgLen=10&pg=' + (req.params.page || 1);
 	url += '&dist=2';
 	url += '&fmt=JSON';
+	url += '&sflag=fto';//result has photo
 	url += '&lang=en';
 	url += '&UID=localhost';
 	url += '&apikey=' + process.env.YELLOW_API_KEY;
