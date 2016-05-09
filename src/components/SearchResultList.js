@@ -3,9 +3,15 @@ import SearchResultItem from './SearchResultItem'
 
 class SearchResultList extends Component {
 	render() {
-		return (
-			<SearchResultItem />
-		)
+		if (this.props.search.showLoading) {
+			return <div />
+		}
+		else {
+			return (
+				<SearchResultItem />
+			)	
+		}
+		
 	}
 }
 

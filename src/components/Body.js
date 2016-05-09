@@ -9,9 +9,9 @@ class Body extends Component {
 
   render() {
     return (
-		<div>
+		  <div>
       		<SearchForm search={this.props.search} actions={this.props.actions} />
-      		<SearchResultList />
+      		<SearchResultList search={this.props.search} />
   		</div>
     )
   }
