@@ -11,8 +11,13 @@ app.use(webpackDevMiddleware(compiler, {noInfo: true, publicPath: config.output.
 app.use(webpackHotMiddleware(compiler));
 app.use(express.static('./dist'));
 
-app.use('/', function (req, res) {
+app.get('/', function (req, res) {
     res.sendFile(path.resolve('dist/index.html'));
+});
+
+app.get('/search/:place', function(req,res){
+	res.writeHead(200, {"Content-type" : 'application/json'});
+	res.end(JSON.stringify([{message: "OK!"}]));
 });
 
 var port = 3000;
@@ -21,3 +26,5 @@ app.listen(port, function(error) {
   if (error) throw error;
   console.log("Express server listening on port", port);
 });
+
+module.exports = app;//for testing purpose
