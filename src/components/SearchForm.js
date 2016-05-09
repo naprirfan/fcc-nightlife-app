@@ -27,14 +27,14 @@ class SearchForm extends Component {
 
 		return (
 			<div className="jumbotron">
-		        <h1>Plans Tonight?</h1>
+		        <h1>Plans for Tonight?</h1>
 		        <p>See which bars are hoppin' tonight and RSVP ahead of time!</p>
 		        <form onSubmit={this._handleSubmit.bind(this)}>
 		          <div className="input-group input-group-lg">
 		            <input 
 		            	type="text" 
 		            	className="form-control" 
-		            	placeholder="Where are you?" 
+		            	placeholder="Where are you? (Powered by YellowAPI)" 
 		            	value={this.state.inputText}
             			onChange={this._handleChange.bind(this)}
 		            />

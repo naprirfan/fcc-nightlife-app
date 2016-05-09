@@ -3,12 +3,16 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import actions from '../redux/actions'
 import SearchForm from './SearchForm'
+import SearchResultList from './SearchResultList'
 
 class Body extends Component {
 
   render() {
     return (
-      <SearchForm search={this.props.search} actions={this.props.actions} />
+		<div>
+      		<SearchForm search={this.props.search} actions={this.props.actions} />
+      		<SearchResultList />
+  		</div>
     )
   }
 
