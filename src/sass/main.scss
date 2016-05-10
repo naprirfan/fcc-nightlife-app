@@ -1,11 +1,13 @@
 @import url(https://fonts.googleapis.com/css?family=Josefin+Sans:400,700|Cardo:400,700);
-
 @import "button_brown";
 @import "loading";
 
+$gold_color: #F9BF3B;
+$black_color: #111111;
+
 body {
-	background-color: #111;
-	color : #F9BF3B;
+	background-color: $black_color;
+	color : $gold_color;
 	font-family: 'Josefin Sans', sans-serif;
 }
 
@@ -20,18 +22,20 @@ h1 {
 }
 .navbar-brand {
 	font-size: 2.3em;
-	color: #E0E2DB !important;
+	color: white !important;
+	position: relative;
+	top: -.2em;
 }
 ul.navbar-right > li > a {
 	font-size: 20px;
-	color: #E0E2DB !important;
+	color: white !important;
 }
 
 .jumbotron {
-	background-color: #111;
+	background-color: $black_color;
 	padding: 6em 2em 0 2em;
 	input[type=text] {
-		background-color: #111;
+		background-color: $black_color;
 		color: white;
 	}
 }
@@ -48,7 +52,7 @@ ul.navbar-right > li > a {
 		font-weight: bold;
 	}
 	.panel-body {
-		color: #111;
+		color: $black_color;
 	}
 }
 
@@ -57,6 +61,12 @@ ul.navbar-right > li > a {
 }
 .pagination {
 	padding-left: 2em;
+	border-color: $gold_color !important;
+	li.active {
+		a {
+			background-color: $gold_color !important;	
+		}
+	}
 }
 
 .badge {
