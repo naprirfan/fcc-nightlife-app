@@ -7,7 +7,7 @@ class SearchResultItem extends Component {
 	      going_count: 0,//todo : change with props
 	      am_i_going: false
 	    }
-	  }
+  	}
 
 	_handleGoing() {
 		//todo : implement if authed

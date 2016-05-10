@@ -1,10 +1,32 @@
 import React, { Component } from 'react'
 
 class SearchPagination extends Component {
+	constructor(props, context) {
+	    super(props, context)
+	    this.state = {
+	    	currentPage: this.props.data.summary.currentPage
+	    }
+  	}
+
+	_handleNextButtonClick(event) {
+		event.preventDefault()
+		this.setState({currentPage: (this.props.data.summary.currentPage + 1)})
+	}
+
+	_handlePreviousButtonClick(event) {
+		event.preventDefault()
+		this.setState({currentPage: (this.props.data.summary.currentPage - 1)})
+	}
+
+	_handlePageClick(page, event) {
+		event.preventDefault()
+		this.setState({currentPage: page})
+	}
+
 	_createPaginationItem() {
 		let summary = this.props.data.summary
 		let paginationItem = []
-		let currentPage = summary.currentPage
+		let currentPage = this.state.currentPage
 		let pageCount = summary.pageCount
 
 		/*
@@ -15,7 +37,7 @@ class SearchPagination extends Component {
 			className = "disabled"
 		}
 		paginationItem.push(
-			<li className={className}>
+			<li onClick={this._handlePreviousButtonClick.bind(this)} className={className}>
 		      <a href="#" aria-label="Previous">
 		        <span aria-hidden="true">&laquo;</span>
 		      </a>
@@ -52,7 +74,7 @@ class SearchPagination extends Component {
 						isActive = 'active'
 					}
 					paginationItem.push(
-						<li className={isActive}>
+						<li onClick={this._handlePageClick.bind(this, i)} className={isActive}>
 							<a href="#">{i}</a>
 						</li>
 					)
@@ -63,7 +85,7 @@ class SearchPagination extends Component {
 					</li>
 				)
 				paginationItem.push(
-					<li>
+					<li onClick={this._handlePageClick.bind(this, pageCount)}>
 						<a href="#">{pageCount}</a>
 					</li>
 				)
@@ -71,7 +93,7 @@ class SearchPagination extends Component {
 			//in middle; hide some front and some back
 			else if (pageCount - (adjacent * 2) > currentPage && currentPage > (adjacent * 2)) {
 				paginationItem.push(
-					<li>
+					<li onClick={this._handlePageClick.bind(this, 1)}>
 						<a href="#">1</a>
 					</li>
 				)
@@ -87,7 +109,7 @@ class SearchPagination extends Component {
 						isActive = 'active'
 					}
 					paginationItem.push(
-						<li className={isActive}>
+						<li onClick={this._handlePageClick.bind(this, i)} className={isActive}>
 							<a href="#">{i}</a>
 						</li>
 					)
@@ -99,7 +121,7 @@ class SearchPagination extends Component {
 					</li>
 				)
 				paginationItem.push(
-					<li>
+					<li onClick={this._handlePageClick.bind(this, pageCount)}>
 						<a href="#">{pageCount}</a>
 					</li>
 				)
@@ -107,7 +129,7 @@ class SearchPagination extends Component {
 			//close to end; only hide early pages
 			else {
 				paginationItem.push(
-					<li>
+					<li onClick={this._handlePageClick.bind(this, 1)}>
 						<a href="#">1</a>
 					</li>
 				)
@@ -123,7 +145,7 @@ class SearchPagination extends Component {
 						isActive = 'active'
 					}
 					paginationItem.push(
-						<li className={isActive}>
+						<li onClick={this._handlePageClick.bind(this, i)} className={isActive}>
 							<a href="#">{i}</a>
 						</li>
 					)
@@ -139,7 +161,7 @@ class SearchPagination extends Component {
 			className = "disabled"
 		}
 		paginationItem.push(
-			<li className={className}>
+			<li onClick={this._handleNextButtonClick.bind(this)} className={className}>
 		      <a href="#" aria-label="Next">
 		        <span aria-hidden="true">&raquo;</span>
 		      </a>
