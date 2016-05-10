@@ -25,18 +25,18 @@ class SearchResultItem extends Component {
 	render() {
 		let am_i_going;
 		if (this.state.am_i_going) {
-			am_i_going = <span onClick={this._handleNotGoing.bind(this)} className="clickable label label-success">You're going</span>
+			am_i_going = <span onClick={this._handleNotGoing.bind(this)} className="clickable label label-success">You're going <i className="fa fa-close"></i></span>
 		}
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
-					{this.props.place.name}
+					{this.props.data.name}
 				</div>
 				<div className="panel-body">
 					<span onClick={this._handleGoing.bind(this)} className="clickable label label-warning">{this.state.going_count} going</span>&nbsp;
 					{am_i_going}
 					<br />
-					{this.props.place.address.street} {this.props.place.address.city} {this.props.place.address.prov}  
+					{this.props.data.address.street} {this.props.data.address.city} {this.props.data.address.prov}  
 				</div>
 			</div>
 		)	

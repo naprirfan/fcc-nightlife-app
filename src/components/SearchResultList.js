@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import SearchResultItem from './SearchResultItem'
+import SearchPagination from './SearchPagination'
 
 class SearchResultList extends Component {
 	render() {
@@ -11,10 +12,11 @@ class SearchResultList extends Component {
 				return (
 					<div>
 						{
-							this.props.search.data.listings.map((place) => {
-								return <SearchResultItem place={place} actions={this.props.actions} />
+							this.props.search.data.listings.map((data) => {
+								return <SearchResultItem data={data} actions={this.props.actions} />
 							})
 						}
+						<SearchPagination data={this.props.search.data} actions={this.props.actions} />
 					</div>
 				)	
 			}
