@@ -5,20 +5,47 @@ class SearchResultItem extends Component {
 	    super(props, context)
 	    this.state = {
 	      going_count: 0,//todo : change with props
-	      am_i_going: false
+	      am_i_going: false,
+	      listing_id: this.props.data.id
 	    }
   	}
 
+  	_getCookie(name) {
+		var dc = document.cookie
+	    var prefix = name + "="
+	    var begin = dc.indexOf("; " + prefix)
+	    if (begin == -1) {
+	        begin = dc.indexOf(prefix)
+	        if (begin != 0) return null
+	    }
+	    else
+	    {
+	        begin += 2
+	        var end = document.cookie.indexOf(";", begin)
+	        if (end == -1) {
+	        end = dc.length
+	        }
+	    }
+	    return unescape(dc.substring(begin + prefix.length, end))
+	}
+
 	_handleGoing() {
-		//todo : implement if authed
-		if (this.state.am_i_going) {
-			return
+		//User authed
+		if (this._getCookie("token") !== null) {
+			if (this.state.am_i_going) {
+				return
+			}
+			this.setState({going_count: (this.state.going_count + 1), am_i_going: true})
+			this.props.actions.markAsGoing(this.props.data.id)
 		}
-		this.setState({going_count: (this.state.going_count + 1), am_i_going: true})
+		else {
+			window.location = "https://github.com/login/oauth/authorize?client_id=62ce3a80ad4ab5613df3"
+		}
+
+		
 	}
 
 	_handleNotGoing() {
-		//todo : implement if authed
 		this.setState({going_count: (this.state.going_count - 1), am_i_going: false})
 	}
 
@@ -36,7 +63,7 @@ class SearchResultItem extends Component {
 					<span onClick={this._handleGoing.bind(this)} className="clickable label label-warning">{this.state.going_count} going</span>&nbsp;
 					{am_i_going}
 					<br />
-					{this.props.data.address.street} {this.props.data.address.city} {this.props.data.address.prov}  
+					{this.props.data.address.street} {this.props.data.address.city} {this.props.data.address.prov}.
 				</div>
 			</div>
 		)	

@@ -19,5 +19,4 @@ describe('API Endpoint', function() {
   it('should add another case');
   it('should add another case');
   it('should add another case');
-  it('should add another case');
 });

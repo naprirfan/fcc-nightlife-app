@@ -14,11 +14,6 @@ class Header extends Component {
 			      </button>
 			      <a className="navbar-brand" href="#"><i className="fa fa-glass"></i></a>
 			    </div>
-			    <div className="collapse navbar-collapse" id="main-navbar">
-			      <ul className="nav navbar-nav navbar-right">
-			        <li><a href="#" className="navButton" data-section="contact">Places I'm Going <span className="badge">42</span></a></li>
-			      </ul>
-			    </div>
 			  </div>
 			</nav>
 		)

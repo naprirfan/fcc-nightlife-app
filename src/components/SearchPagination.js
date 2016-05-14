@@ -1,39 +1,34 @@
 import React, { Component } from 'react'
 
 class SearchPagination extends Component {
-	constructor(props, context) {
-	    super(props, context)
-	    this.state = {
-	    	currentPage: this.props.data.summary.currentPage
-	    }
-  	}
-
 	_handleNextButtonClick(event) {
 		event.preventDefault()
-		this.setState({currentPage: (this.props.data.summary.currentPage + 1)})
+		let nextPage = this.props.search.data.summary.currentPage + 1
+		this.props.actions.doSearch(this.props.search.query, nextPage)
 	}
 
 	_handlePreviousButtonClick(event) {
 		event.preventDefault()
-		this.setState({currentPage: (this.props.data.summary.currentPage - 1)})
+		let prevPage = this.props.search.data.summary.currentPage - 1
+		this.props.actions.doSearch(this.props.search.query, prevPage)
 	}
 
 	_handlePageClick(page, event) {
 		event.preventDefault()
-		this.setState({currentPage: page})
+		this.props.actions.doSearch(this.props.search.query, page)
 	}
 
 	_createPaginationItem() {
-		let summary = this.props.data.summary
-		let paginationItem = []
-		let currentPage = this.state.currentPage
+		let summary = this.props.search.data.summary
+		let currentPage = summary.currentPage
 		let pageCount = summary.pageCount
+		let paginationItem = []
 
 		/*
 		INSERT PREVIOUS BUTTON
 		*/
 		let className = ''
-		if (summary.currentPage == 1) {
+		if (currentPage == 1) {
 			className = "disabled"
 		}
 		paginationItem.push(
@@ -58,7 +53,7 @@ class SearchPagination extends Component {
 					isActive = 'active'
 				}
 				paginationItem.push(
-					<li className={isActive}>
+					<li onClick={this._handlePageClick.bind(this, i)} className={isActive}>
 						<a href="#">{i}</a>
 					</li>
 				)
@@ -157,7 +152,7 @@ class SearchPagination extends Component {
 		INSERT NEXT BUTTON
 		*/
 		className = ''
-		if (summary.currentPage == summary.pageCount) {
+		if (currentPage == pageCount) {
 			className = "disabled"
 		}
 		paginationItem.push(
@@ -172,7 +167,7 @@ class SearchPagination extends Component {
 	}
 
 	render() {
-		let summary = this.props.data.summary
+		let summary = this.props.search.data.summary
 		if (summary.pageCount == 1) {
 			return <div />
 		}

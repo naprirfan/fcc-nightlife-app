@@ -8,11 +8,17 @@ let searchReducer = function(search = {}, action) {
       return Object.assign({}, search, {
         showLoading : false
       })
-    case 'POPULATE_ITEMS':
+    case 'SET_SEARCH_QUERY':
+      return Object.assign({}, search, {
+        query: action.query
+      })
+    case 'POPULATE_SEARCH_ITEMS':
       return Object.assign({}, search, {
         showLoading : false,
         data : action.data
       })
+    case 'MARK_AS_GOING_DONE':
+      return Object.assign({}, search, action.data)
     default: 
       return search;
   }

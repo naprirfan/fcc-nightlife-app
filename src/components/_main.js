@@ -8,7 +8,8 @@ import { Provider } from 'react-redux'
 let initialState = {
   search : {
     showLoading : false
-  }
+  },
+  page : "home"
 }
 
 let store = configureStore(initialState)

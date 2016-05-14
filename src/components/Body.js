@@ -6,14 +6,14 @@ import SearchForm from './SearchForm'
 import SearchResultList from './SearchResultList'
 
 class Body extends Component {
-
   render() {
     return (
-		  <div>
-      		<SearchForm search={this.props.search} actions={this.props.actions} />
-      		<SearchResultList search={this.props.search} actions={this.props.actions} />
-  		</div>
-    )
+      <div>
+          <SearchForm search={this.props.search} actions={this.props.actions} />
+          <SearchResultList search={this.props.search} actions={this.props.actions} />
+      </div>
+    )  
+    
   }
 
 }

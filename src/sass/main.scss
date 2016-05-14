@@ -9,6 +9,7 @@ body {
 	background-color: $black_color;
 	color : $gold_color;
 	font-family: 'Josefin Sans', sans-serif;
+	padding-top: 5.7em;
 }
 
 h1 {
@@ -33,7 +34,7 @@ ul.navbar-right > li > a {
 
 .jumbotron {
 	background-color: $black_color;
-	padding: 6em 2em 0 2em;
+	padding: 0 2em 0 2em;
 	input[type=text] {
 		background-color: $black_color;
 		color: white;
@@ -74,4 +75,12 @@ ul.navbar-right > li > a {
 	position: relative;
 	top: -10px;
 	left: -10px;
+}
+
+.breadcrumb {
+	background-color: $black_color;
+}
+.googlemap {
+	width: 40em;
+	height: 40em;
 }

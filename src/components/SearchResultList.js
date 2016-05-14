@@ -16,7 +16,7 @@ class SearchResultList extends Component {
 								return <SearchResultItem data={data} actions={this.props.actions} />
 							})
 						}
-						<SearchPagination data={this.props.search.data} actions={this.props.actions} />
+						<SearchPagination search={this.props.search} actions={this.props.actions} />
 					</div>
 				)	
 			}
