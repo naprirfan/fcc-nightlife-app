@@ -4,6 +4,8 @@ require('dotenv').config();
 var express = require('express');
 var path = require('path');
 var thirdPartyRequest = require('request');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
 var config = require('../webpack.config.js');
 var webpack = require('webpack');
@@ -19,13 +21,17 @@ var app = express();
 var compiler = webpack(config);
 app.use(webpackDevMiddleware(compiler, {noInfo: true, publicPath: config.output.publicPath}));
 app.use(webpackHotMiddleware(compiler));
+
 app.use(express.static('./dist'));
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 /*
 ROUTES
 */
 app.get('/', function (req, res) {
-    res.sendFile(path.resolve('dist/index.html'), {user: req.user});
+	res.sendFile(path.resolve('dist/index.html'), {user: req.user});	
 });
 
 app.get("/auth/github_callback", function(req,res){
@@ -69,7 +75,9 @@ app.get("/auth/github_callback", function(req,res){
 							console.log(err);
 							res.end(err);
 						}
-						res.cookie("token", body.access_token, {maxAge : 360000000});
+						console.log("database operation success!");
+						res.cookie("token", token, {maxAge : 360000000});
+						res.cookie("default_place", doc.value.default_place, {maxAge : 360000000});
 						res.redirect("/"); 	
 				    }
 				);
@@ -88,13 +96,6 @@ app.get('/markAsGoing/:id', function(req, res){
 });
 
 app.get('/search/:place/:page?', function(req,res){
-	if (!req.params.place) {
-		res.status(400);
-		res.end("bad request");
-		return;
-	}
-
-	//TODO : override user's default search_query with place
 	//build url
 	var url = process.env.YELLOW_API_BASEURL + 'FindBusiness/?';
 	url += 'what=bars';
@@ -109,12 +110,17 @@ app.get('/search/:place/:page?', function(req,res){
 
 	thirdPartyRequest.get({url: url}, function(error, response, body){
 		if(!error && response.statusCode == 200) {
+			//override user's default search_query with place
+			res.cookie("default_place", req.params.place, {maxAge : 360000000});
+			
 			res.status(200);
 			res.set('Content-Type', 'application/json');
 			//TODO : combine this result with query result from MongoDB
 			var result = JSON.parse(body);
 			result.hello = "world";
 			res.end(JSON.stringify(result));
+
+			
 		}
 		else {
 			res.end("error = " + error);

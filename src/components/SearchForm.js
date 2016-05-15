@@ -8,6 +8,36 @@ class SearchForm extends Component {
 	    }
   	}
 
+  	componentDidMount() {
+  		if (window.isUserAuthed) {
+  			var default_place = this._getCookie("default_place")
+  			if (default_place != "") {
+  				default_place = default_place.split(";")[0]
+  				this.setState({inputText: default_place})
+  				this.props.actions.doSearch(default_place)	
+  			}
+  		}
+  	}
+
+  	_getCookie(name) {
+		var dc = document.cookie
+	    var prefix = name + "="
+	    var begin = dc.indexOf("; " + prefix)
+	    if (begin == -1) {
+	        begin = dc.indexOf(prefix)
+	        if (begin != 0) return null
+	    }
+	    else
+	    {
+	        begin += 2
+	        var end = document.cookie.indexOf(";", begin)
+	        if (end == -1) {
+	        end = dc.length
+	        }
+	    }
+	    return unescape(dc.substring(begin + prefix.length, end))
+	}
+
   	_handleChange(event) {
 	    this.setState({
 	      inputText: event.target.value
