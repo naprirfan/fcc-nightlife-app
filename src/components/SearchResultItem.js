@@ -3,8 +3,18 @@ import React, { Component } from 'react'
 class SearchResultItem extends Component {
 	constructor(props, context) {
 	    super(props, context)
+
+	    let going_count = 0
+	    for (let i = 0; i < this.props.data.place_counter.length; i++) {
+	    	let place = this.props.data.place_counter[i]
+	    	if (place.id == this.props.data.id) {
+	    		going_count = place.counter
+	    		break
+	    	}
+	    }
+
 	    this.state = {
-	      going_count: 0,//todo : change with props
+	      going_count: going_count,//todo : change with props
 	      am_i_going: false,
 	      listing_id: this.props.data.id
 	    }

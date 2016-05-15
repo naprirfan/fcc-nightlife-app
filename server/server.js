@@ -127,8 +127,7 @@ app.get('/markAsNotGoing/:id', function(req, res){
 
 app.get('/search/:place/:page?', function(req,res){
 	//if authed
-	if(req.cookies.token !== null) {
-		console.log(req.cookies.token);
+	if(req.cookies.token !== undefined) {
 		mongodbclient.connect(db_url, function(err,db){
 			if (err) throw err;
 			
@@ -150,7 +149,6 @@ app.get('/search/:place/:page?', function(req,res){
 					if (err) {
 						res.end(err);
 					}
-					console.log(doc);
 					//override user's default search_query with place
 					res.cookie("default_place", req.params.place, {maxAge : 360000000});
 					//pass the user obj
