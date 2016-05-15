@@ -10,28 +10,9 @@ class SearchResultItem extends Component {
 	    }
   	}
 
-  	_getCookie(name) {
-		var dc = document.cookie
-	    var prefix = name + "="
-	    var begin = dc.indexOf("; " + prefix)
-	    if (begin == -1) {
-	        begin = dc.indexOf(prefix)
-	        if (begin != 0) return null
-	    }
-	    else
-	    {
-	        begin += 2
-	        var end = document.cookie.indexOf(";", begin)
-	        if (end == -1) {
-	        end = dc.length
-	        }
-	    }
-	    return unescape(dc.substring(begin + prefix.length, end))
-	}
-
 	_handleGoing() {
 		//User authed
-		if (this._getCookie("token") !== null) {
+		if (window.isUserAuthed) {
 			if (this.state.am_i_going) {
 				return
 			}
@@ -41,8 +22,6 @@ class SearchResultItem extends Component {
 		else {
 			window.location = "https://github.com/login/oauth/authorize?client_id=62ce3a80ad4ab5613df3"
 		}
-
-		
 	}
 
 	_handleNotGoing() {

@@ -29,6 +29,7 @@ app.get('/', function (req, res) {
 });
 
 app.get("/auth/github_callback", function(req,res){
+	var _mongodbclient = mongodbclient;
 	thirdPartyRequest.post(
 		ACCESS_TOKEN_REQUEST_URL,
 		{json : {
@@ -43,30 +44,35 @@ app.get("/auth/github_callback", function(req,res){
 			} 
 			
 			var token = body.access_token;
-			console.log("token acquired = " + token);
-			mongodbclient.connect(db_url, function(err,db){
+			_mongodbclient.connect(db_url, function(err,db){
 				if (err) throw err;
 				
 				var collection = db.collection("nightlife_app_user");
-				collection.findAndModify({
-					query: { token: token },
-					update: {
+				collection.findAndModify(
+					{ 
+						token: token 
+					},//query
+					{}, //sort option
+					{
 						$setOnInsert: { 
 							token: token,
+							default_place: "",
 							going_places: []
 						}
-					},
-					upsert: true, // insert the document if it does not exist
+					},//update
+					{
+						new: true,
+						upsert: true
+					}, // insert the document if it does not exist
 					function(err,doc) {
 						if (err) {
 							console.log(err);
 							res.end(err);
 						}
-						console.log("database updated");
-				   		res.cookie("token", body.access_token, {maxAge : 360000000});
+						res.cookie("token", body.access_token, {maxAge : 360000000});
 						res.redirect("/"); 	
 				    }
-				});
+				);
 			});
 		}
 	)
