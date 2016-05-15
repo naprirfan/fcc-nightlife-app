@@ -92,40 +92,77 @@ app.get("/signout", function(req,res){
 });
 
 app.get('/markAsGoing/:id', function(req, res){
+	mongodbclient.connect(db_url, function(err,db){
+		if (err) throw err;
+		
+		var collection = db.collection("nightlife_app_user");
+		collection.findAndModify(
+			{ 
+				token: req.cookies.token 
+			},//query
+			{}, //sort option
+			{
+				$push: { 
+					going_places: req.params.id
+				}
+			},//update
+			{
+				new: true
+			}, // insert the document if it does not exist
+			function(err,doc) {
+				if (err) {
+					console.log(err);
+					res.end(err);
+				}
+				console.log("mark as going operation success!");
+				res.end(JSON.stringify({message: "success!"}));
+		    }
+		);
+	});
+});
+
+app.get('/markAsNotGoing/:id', function(req, res){
 	res.end("Hello!");
 });
 
 app.get('/search/:place/:page?', function(req,res){
-	//build url
-	var url = process.env.YELLOW_API_BASEURL + 'FindBusiness/?';
-	url += 'what=bars';
-	url += '&where=' + req.params.place;
-	url += '&pgLen=10&pg=' + (req.params.page || 1);
-	url += '&dist=2';
-	url += '&fmt=JSON';
-	url += '&sflag=fto';//result has photo
-	url += '&lang=en';
-	url += '&UID=localhost';
-	url += '&apikey=' + process.env.YELLOW_API_KEY;
-
-	thirdPartyRequest.get({url: url}, function(error, response, body){
-		if(!error && response.statusCode == 200) {
-			//override user's default search_query with place
-			res.cookie("default_place", req.params.place, {maxAge : 360000000});
+	//if authed
+	if(req.cookies.token !== null) {
+		console.log(req.cookies.token);
+		mongodbclient.connect(db_url, function(err,db){
+			if (err) throw err;
 			
-			res.status(200);
-			res.set('Content-Type', 'application/json');
-			//TODO : combine this result with query result from MongoDB
-			var result = JSON.parse(body);
-			result.hello = "world";
-			res.end(JSON.stringify(result));
-
-			
-		}
-		else {
-			res.end("error = " + error);
-		}
-	});
+			var collection = db.collection("nightlife_app_user");
+			collection.findAndModify(
+				{ 
+					token: req.cookies.token 
+				},//query
+				{}, //sort option
+				{
+					$set: { 
+						default_place: req.params.place
+					}
+				},//update
+				{
+					new: true
+				}, // insert the document if it does not exist
+				function(err,doc) {
+					if (err) {
+						res.end(err);
+					}
+					console.log(doc);
+					//override user's default search_query with place
+					res.cookie("default_place", req.params.place, {maxAge : 360000000});
+					//pass the user obj
+					doSearch(req,res, doc.value);
+			    }
+			);
+		});
+		
+	}
+	else {
+		doSearch(req,res, null);	
+	}
 });
 
 app.get('*', function(req,res){
@@ -140,3 +177,55 @@ app.listen(port, function(error) {
 });
 
 module.exports = app;//for testing purpose
+
+function doSearch(req,res, userObject) {
+	//build url
+	var url = process.env.YELLOW_API_BASEURL + 'FindBusiness/?';
+	url += 'what=bars';
+	url += '&where=' + req.params.place;
+	url += '&pgLen=10&pg=' + (req.params.page || 1);
+	url += '&dist=2';
+	url += '&fmt=JSON';
+	url += '&sflag=fto';//result has photo
+	url += '&lang=en';
+	url += '&UID=localhost';
+	url += '&apikey=' + process.env.YELLOW_API_KEY;
+
+	thirdPartyRequest.get({url: url}, function(error, response, body){
+		if(!error && response.statusCode == 200) {
+			//TODO : combine this result with query result from MongoDB
+			var result = JSON.parse(body);
+			var listingIds = [];
+			for (var i = 0; i < result.listings.length; i++) {
+				listingIds.push(+(result.listings[i].id));
+			}
+
+			mongodbclient.connect(db_url, function(err,db){
+				if (err) throw err;
+				
+				var collection = db.collection("nightlife_app_place_counter");
+				collection.find(
+					{ 
+						id: {
+							$in : listingIds
+						}
+					}
+				).toArray(function(err,docs){
+					if(err) throw err;
+					result.place_counter = docs;
+					if(userObject) {
+						result.user = userObject;
+					}
+
+					res.status(200);
+					res.set('Content-Type', 'application/json');
+					res.end(JSON.stringify(result));
+				});
+			});
+			
+		}
+		else {
+			res.end("error = " + error);
+		}
+	});
+}
