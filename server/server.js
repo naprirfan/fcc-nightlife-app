@@ -2,7 +2,7 @@ const ACCESS_TOKEN_REQUEST_URL = "https://github.com/login/oauth/access_token";
 require('dotenv').config();
 
 var express = require('express');
-var path = require('path');
+var path = require('path'); 
 var thirdPartyRequest = require('request');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -127,7 +127,8 @@ app.get('/markAsNotGoing/:id', function(req, res){
 
 app.get('/search/:place/:page?', function(req,res){
 	//if authed
-	if(req.cookies.token !== undefined) {
+	if(req.cookies.token !== null) {
+		console.log("cookie present");
 		mongodbclient.connect(db_url, function(err,db){
 			if (err) throw err;
 			
@@ -159,6 +160,7 @@ app.get('/search/:place/:page?', function(req,res){
 		
 	}
 	else {
+		console.log("cookie NOT present");
 		doSearch(req,res, null);	
 	}
 });
