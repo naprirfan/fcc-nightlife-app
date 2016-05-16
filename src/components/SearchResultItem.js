@@ -44,6 +44,7 @@ class SearchResultItem extends Component {
 
 	_handleNotGoing() {
 		this.setState({going_count: (this.state.going_count - 1), am_i_going: false})
+		this.props.actions.markAsNotGoing(this.props.data.id)
 	}
 
 	render() {

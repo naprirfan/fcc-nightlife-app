@@ -19,6 +19,8 @@ let searchReducer = function(search = {}, action) {
       })
     case 'MARK_AS_GOING_DONE':
       return Object.assign({}, search, action.data)
+    case 'MARK_AS_NOT_GOING_DONE':
+      return Object.assign({}, search, action.data)
     default: 
       return search;
   }

@@ -125,7 +125,34 @@ app.get('/markAsGoing/:id', function(req, res){
 });
 
 app.get('/markAsNotGoing/:id', function(req, res){
-	res.end("Hello!");
+	if (req.cookies.token !== null) {
+		mongodbclient.connect(db_url, function(err,db){
+			if (err) throw err;
+			
+			var collection = db.collection("nightlife_app_user");
+			collection.findAndModify(
+				{ 
+					token: req.cookies.token 
+				},//query
+				{}, //sort option
+				{
+					$pull: { 
+						going_places: req.params.id
+					}
+				},//update
+				{
+					new: true
+				}, // insert the document if it does not exist
+				function(err,doc) {
+					if (err) {
+						console.log(err);
+						res.end(err);
+					}
+					incrementPlaceCounter(req,res,-1);
+			    }
+			);
+		});
+	}
 });
 
 app.get('/search/:place/:page?', function(req,res){
@@ -190,7 +217,7 @@ function incrementPlaceCounter(req,res, mode) {
 		var collection = db.collection("nightlife_app_place_counter");
 		collection.findAndModify(
 			{ 
-				id: req.params.id
+				id: +(req.params.id)
 			},//query
 			{}, //sort option
 			{
