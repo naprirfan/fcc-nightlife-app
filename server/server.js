@@ -195,7 +195,7 @@ function incrementPlaceCounter(req,res, mode) {
 			{}, //sort option
 			{
 				$setOnInsert: { 
-					id: req.params.id
+					id: +(req.params.id)
 				},
 				$inc: { 
 					counter: mode

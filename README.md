@@ -18,3 +18,5 @@ Technology stack :
 
 Powered by : Yellow API
 Live demo : http://nightlife.muhammad-irfan.me
+
+Tested with Safari 9.1
