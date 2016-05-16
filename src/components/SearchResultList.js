@@ -13,10 +13,6 @@ class SearchResultList extends Component {
 				console.log(this.props.search.data)
 				let placeCounter = this.props.search.data.place_counter || null
 				let user = this.props.search.data.user || null
-				console.log('placeCounter')
-				console.log(placeCounter)
-				console.log('user')
-				console.log(user)
 
 				return (
 					<div>

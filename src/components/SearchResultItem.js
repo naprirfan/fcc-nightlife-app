@@ -12,9 +12,18 @@ class SearchResultItem extends Component {
 	    	counter = place[0].counter
 	    }
 
+	    let am_i_going = false
+	    // if (this.props.user) {
+	    // 	console.log(this.props.user)
+	    // 	let arr = this.props.user.going_places
+	    // 	if (arr.indexOf(+(this.props.data.id)) > -1) {
+	    // 		am_i_going = true
+	    // 	}
+	    // }
+
 	    this.state = {
-	      going_count: counter,//todo : change with props
-	      am_i_going: false,
+	      going_count: counter,
+	      am_i_going: am_i_going,
 	      listing_id: this.props.data.id
 	    }
   	}

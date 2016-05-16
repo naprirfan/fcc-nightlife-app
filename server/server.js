@@ -22,8 +22,8 @@ var compiler = webpack(config);
 app.use(webpackDevMiddleware(compiler, {noInfo: true, publicPath: config.output.publicPath}));
 app.use(webpackHotMiddleware(compiler));
 
-app.use(express.static('./dist'));
 app.use(cookieParser());
+app.use(express.static('./dist'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -76,6 +76,8 @@ app.get("/auth/github_callback", function(req,res){
 							res.end(err);
 						}
 						console.log("database operation success!");
+						res.clearCookie("token");
+						res.clearCookie("default_place");
 						res.cookie("token", token, {maxAge : 360000000});
 						res.cookie("default_place", doc.value.default_place, {maxAge : 360000000});
 						res.redirect("/"); 	
@@ -92,33 +94,34 @@ app.get("/signout", function(req,res){
 });
 
 app.get('/markAsGoing/:id', function(req, res){
-	mongodbclient.connect(db_url, function(err,db){
-		if (err) throw err;
-		
-		var collection = db.collection("nightlife_app_user");
-		collection.findAndModify(
-			{ 
-				token: req.cookies.token 
-			},//query
-			{}, //sort option
-			{
-				$push: { 
-					going_places: req.params.id
-				}
-			},//update
-			{
-				new: true
-			}, // insert the document if it does not exist
-			function(err,doc) {
-				if (err) {
-					console.log(err);
-					res.end(err);
-				}
-				console.log("mark as going operation success!");
-				res.end(JSON.stringify({message: "success!"}));
-		    }
-		);
-	});
+	if (req.cookies.token !== null) {
+		mongodbclient.connect(db_url, function(err,db){
+			if (err) throw err;
+			
+			var collection = db.collection("nightlife_app_user");
+			collection.findAndModify(
+				{ 
+					token: req.cookies.token 
+				},//query
+				{}, //sort option
+				{
+					$push: { 
+						going_places: req.params.id
+					}
+				},//update
+				{
+					new: true
+				}, // insert the document if it does not exist
+				function(err,doc) {
+					if (err) {
+						console.log(err);
+						res.end(err);
+					}
+					incrementPlaceCounter(req,res,1);
+			    }
+			);
+		});
+	}
 });
 
 app.get('/markAsNotGoing/:id', function(req, res){
@@ -151,6 +154,7 @@ app.get('/search/:place/:page?', function(req,res){
 						res.end(err);
 					}
 					//override user's default search_query with place
+					res.clearCookie("default_place");
 					res.cookie("default_place", req.params.place, {maxAge : 360000000});
 					//pass the user obj
 					doSearch(req,res, doc.value);
@@ -177,6 +181,42 @@ app.listen(port, function(error) {
 });
 
 module.exports = app;//for testing purpose
+
+function incrementPlaceCounter(req,res, mode) {
+	var mode = mode || 1;//whether to increment or decrement
+	mongodbclient.connect(db_url, function(err,db){
+		if (err) throw err;
+		
+		var collection = db.collection("nightlife_app_place_counter");
+		collection.findAndModify(
+			{ 
+				id: req.params.id
+			},//query
+			{}, //sort option
+			{
+				$setOnInsert: { 
+					id: req.params.id
+				},
+				$inc: { 
+					counter: mode
+				}
+			},//update
+			{
+				new: true,
+				upsert: true
+			}, // insert the document if it does not exist
+			function(err,doc) {
+				if (err) {
+					console.log(err);
+					res.end(err);
+				}
+				console.log("operation success!");
+				res.end(JSON.stringify({message: "success!"}));
+		    }
+		);
+	});
+
+}
 
 function doSearch(req,res, userObject) {
 	//build url
